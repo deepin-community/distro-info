@@ -17,6 +17,7 @@
 // C standard libraries
 #include <assert.h>
 #include <errno.h>
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -166,6 +167,37 @@ static date_t *read_date(const char *s, int *failures, const char *filename,
             date = NULL;
         }
     }
+    return date;
+}
+
+// Return current date. Take SOURCE_DATE_EPOCH into account.
+// The result needs to be freed after its use.
+static date_t *get_current_date() {
+    char *source_date_epoch, *endptr;
+    date_t *date;
+    unsigned long long epoch;
+    struct tm *now;
+    time_t time_now = 0;
+
+    source_date_epoch = getenv("SOURCE_DATE_EPOCH");
+    if (source_date_epoch != NULL) {
+        epoch = strtoull(source_date_epoch, &endptr, 10);
+        if (epoch > 0 && epoch < ULONG_MAX && *endptr == '\0') {
+            time_now = epoch;
+        } else {
+            fprintf(stderr, NAME ": Environment variable SOURCE_DATE_EPOCH"
+                    "='%s' not a valid epoch. Ignoring.\n", source_date_epoch);
+        }
+    }
+    if (time_now == 0) {
+        time_now = time(NULL);
+    }
+    now = gmtime(&time_now);
+
+    date = malloc(sizeof(date_t));
+    date->year = 1900 + now->tm_year;
+    date->month = 1 + now->tm_mon;
+    date->day = now->tm_mday;
     return date;
 }
 
@@ -924,12 +956,7 @@ int main(int argc, char *argv[]) {
     }
 
     if(unlikely(date == NULL)) {
-        time_t time_now = time(NULL);
-        struct tm *now = gmtime(&time_now);
-        date = malloc(sizeof(date_t));
-        date->year = 1900 + now->tm_year;
-        date->month = 1 + now->tm_mon;
-        date->day = now->tm_mday;
+        date = get_current_date();
     }
 
     distro_list = read_data(DATA_DIR "/" CSV_NAME ".csv", &content);

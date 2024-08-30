@@ -3,23 +3,27 @@ Section: devel
 Priority: optional
 Maintainer: Benjamin Drung <bdrung@debian.org>
 Uploaders: Stefano Rivera <stefanor@debian.org>
-Build-Depends: debhelper-compat (= 13),
-               dh-python,
-               distro-info-data (>= 0.46),
-               pylint (>= 2.2.2-2~),
+Build-Depends: black <!nocheck>,
+               debhelper-compat (= 13),
+               dh-sequence-python3,
+               distro-info-data (>= 0.59~) <!nocheck>,
+               isort <!nocheck>,
+               mypy [!i386] <!nocheck>,
+               pylint (>= 2.2.2-2~) <!nocheck>,
                python3-all,
-               python3-flake8,
+               python3-flake8 <!nocheck>,
                python3-setuptools,
-               shunit2 (>= 2.1.6)
-Standards-Version: 4.6.0
+               python3-typeshed <!nocheck>,
+               shunit2 <!nocheck>
+Standards-Version: 4.6.2
 Rules-Requires-Root: no
 Vcs-Git: https://salsa.debian.org/debian/distro-info.git
 Vcs-Browser: https://salsa.debian.org/debian/distro-info
 
 Package: distro-info
 Architecture: any
-Depends: distro-info-data (>= 0.46), ${misc:Depends}, ${shlibs:Depends}
-Suggests: shunit2 (>= 2.1.6)
+Depends: distro-info-data (>= 0.59~), ${misc:Depends}, ${shlibs:Depends}
+Suggests: shunit2
 Description: provides information about the distributions' releases
  Information about all releases of Debian and Ubuntu. The distro-info script
  will give you the codename for e.g. the latest stable release of your
@@ -29,7 +33,7 @@ Description: provides information about the distributions' releases
 Package: libdistro-info-perl
 Architecture: all
 Section: perl
-Depends: distro-info-data (>= 0.46), ${misc:Depends}, ${perl:Depends}
+Depends: distro-info-data (>= 0.59~), ${misc:Depends}, ${perl:Depends}
 Multi-Arch: foreign
 Description: information about distributions' releases (Perl module)
  Information about all releases of Debian and Ubuntu.

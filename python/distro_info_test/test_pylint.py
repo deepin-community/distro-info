@@ -13,7 +13,7 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-"""test_pylint.py - Run pylint"""
+"""Run pylint."""
 
 import os
 import re
@@ -34,16 +34,12 @@ class PylintTestCase(unittest.TestCase):
     a config file.
     """
 
-    def test_pylint(self):
-        """Test: Run pylint on Python source code"""
-
-        cmd = [sys.executable, "-m", "pylint", "--rcfile=" + CONFIG, "--"] + get_source_files()
+    def test_pylint(self) -> None:
+        """Test: Run pylint on Python source code."""
+        cmd = ["pylint", "--rcfile=" + CONFIG] + get_source_files()
         if unittest_verbosity() >= 2:
-            sys.stderr.write("Running following command:\n{}\n".format(" ".join(cmd)))
-        process = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True
-        )
-        out, err = process.communicate()
+            sys.stderr.write(f"Running following command:\n{' '.join(cmd)}\n")
+        process = subprocess.run(cmd, capture_output=True, check=False, text=True)
 
         if process.returncode != 0:  # pragma: no cover
             # Strip trailing summary (introduced in pylint 1.7). This summary might look like:
@@ -52,25 +48,23 @@ class PylintTestCase(unittest.TestCase):
             # Your code has been rated at 10.00/10
             #
             out = re.sub(
-                "^(-+|Your code has been rated at .*)$", "", out.decode(), flags=re.MULTILINE
+                "^(-+|Your code has been rated at .*)$", "", process.stdout, flags=re.MULTILINE
             ).rstrip()
 
             # Strip logging of used config file (introduced in pylint 1.8)
-            err = re.sub("^Using config file .*\n", "", err.decode()).rstrip()
+            err = re.sub("^Using config file .*\n", "", process.stderr.rstrip())
 
             msgs = []
             if err:
                 msgs.append(
-                    "pylint exited with code {} and has unexpected output on stderr:\n{}".format(
-                        process.returncode, err
-                    )
+                    f"pylint exited with code {process.returncode} "
+                    f"and has unexpected output on stderr:\n{err}"
                 )
             if out:
-                msgs.append("pylint found issues:\n{}".format(out))
+                msgs.append(f"pylint found issues:\n{out}")
             if not msgs:
                 msgs.append(
-                    "pylint exited with code {} and has no output on stdout or stderr.".format(
-                        process.returncode
-                    )
+                    f"pylint exited with code {process.returncode} "
+                    "and has no output on stdout or stderr."
                 )
             self.fail("\n".join(msgs))

@@ -250,6 +250,11 @@ testUnknownSeries() {
     failure "--series foobar" "debian-distro-info: unknown distribution series \`foobar'"
 }
 
+testSourceDateEpoch() {
+    SOURCE_DATE_EPOCH=1675417275 success "--stable" "bullseye"
+    SOURCE_DATE_EPOCH=badcoffee hasWarning "--stable" "debian-distro-info: Environment variable SOURCE_DATE_EPOCH='badcoffee' not a valid epoch. Ignoring."
+}
+
 testDays() {
     # day after lenny released
     date=2009-02-15
@@ -346,10 +351,10 @@ testDays() {
     success "--testing --date=$date --days=release -f" "Debian 7 \"Wheezy\" 1"
     success "--testing --date=$date --days=release -r" "7 1"
 
-    success "--testing --date=$date --days=eol" "1089"
-    success "--testing --date=$date --days=eol -c" "wheezy 1089"
-    success "--testing --date=$date --days=eol -f" "Debian 7 \"Wheezy\" 1089"
-    success "--testing --date=$date --days=eol -r" "7 1089"
+    success "--testing --date=$date --days=eol" "1088"
+    success "--testing --date=$date --days=eol -c" "wheezy 1088"
+    success "--testing --date=$date --days=eol -f" "Debian 7 \"Wheezy\" 1088"
+    success "--testing --date=$date --days=eol -r" "7 1088"
 
     success "--testing --date=$date --days=eol-lts" "1854"
     success "--testing --date=$date --days=eol-lts -c" "wheezy 1854"

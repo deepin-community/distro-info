@@ -1,3 +1,65 @@
+distro-info (1.7) unstable; urgency=medium
+
+  * Update tests for distro-info-data 0.59, which adjusted Debian 7's EoL
+    (Closes: #1054946)
+
+ -- Stefano Rivera <stefanor@debian.org>  Sun, 29 Oct 2023 10:46:52 +0200
+
+distro-info (1.6) unstable; urgency=medium
+
+  * python: mark distro_info with py.typed marker (Closes: #1053936)
+  * Let distro-info programs respect SOURCE_DATE_EPOCH (Closes: #1034422)
+
+ -- Benjamin Drung <bdrung@debian.org>  Thu, 26 Oct 2023 00:16:50 +0200
+
+distro-info (1.5) unstable; urgency=medium
+
+  * Skip mypy on i386 (not available on Ubuntu)
+
+ -- Benjamin Drung <bdrung@debian.org>  Fri, 03 Feb 2023 10:41:15 +0100
+
+distro-info (1.4) unstable; urgency=medium
+
+  * python:
+    - Assert that Python version is PEP440 compliant
+    - Handle more Debian versions correctly in make_pep440_compliant
+    - Use result="codename" as default everywhere
+    - Require 'created' field to be set because it is needed by is_supported()
+    - Check dates to be set before comparing them
+    - Add type annotations and check them with mypy
+  * Bump Standards-Version to 4.6.2
+
+ -- Benjamin Drung <bdrung@debian.org>  Mon, 30 Jan 2023 12:08:37 +0100
+
+distro-info (1.3) unstable; urgency=medium
+
+  * Team upload.
+  * Use pylint executable for tests
+  * Use dh-sequence-python3
+
+ -- Jochen Sprickerhof <jspricke@debian.org>  Mon, 16 Jan 2023 09:53:47 +0100
+
+distro-info (1.2) unstable; urgency=medium
+
+  [ Debian Janitor ]
+  * Remove constraints unnecessary since buster:
+    + Build-Depends: Drop versioned constraint on shunit2.
+    + distro-info: Drop versioned constraint on shunit2 in Suggests.
+
+  [ Stefano Rivera ]
+  * Update pylint config to fix FTBFS with pylint 2.15.
+  * Support the nocheck build profile.
+  * Bump Standards-Version to 4.6.1, no changes needed.
+
+  [ Benjamin Drung ]
+  * python: Update test cases
+  * python: Format Python code with black
+  * python: Sort imports with isort
+  * python: Cover distro_info_test by linters as well
+  * python: Use PEP440 compliant version in setup.py (LP: #1991606)
+
+ -- Stefano Rivera <stefanor@debian.org>  Sat, 15 Oct 2022 19:03:06 +0200
+
 distro-info (1.1) unstable; urgency=medium
 
   * Man pages and help: Clarify that --supported includes development releases
