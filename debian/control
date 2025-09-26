@@ -3,11 +3,9 @@ Section: devel
 Priority: optional
 Maintainer: Benjamin Drung <bdrung@debian.org>
 Uploaders: Stefano Rivera <stefanor@debian.org>
-Build-Depends: black <!nocheck>,
-               debhelper-compat (= 13),
+Build-Depends: debhelper-compat (= 13),
                dh-sequence-python3,
                distro-info-data (>= 0.59~) <!nocheck>,
-               isort <!nocheck>,
                mypy [!i386] <!nocheck>,
                pylint (>= 2.2.2-2~) <!nocheck>,
                python3-all,
@@ -15,7 +13,7 @@ Build-Depends: black <!nocheck>,
                python3-setuptools,
                python3-typeshed <!nocheck>,
                shunit2 <!nocheck>
-Standards-Version: 4.6.2
+Standards-Version: 4.7.0
 Rules-Requires-Root: no
 Vcs-Git: https://salsa.debian.org/debian/distro-info.git
 Vcs-Browser: https://salsa.debian.org/debian/distro-info
